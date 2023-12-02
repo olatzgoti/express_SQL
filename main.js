@@ -11,7 +11,8 @@ const db = mysql.createConnection({
     host: '127.0.0.1',
     port: 3308,
     user: 'root',
-    password: '1234'
+    password: '1234',
+	database: 'expressSqlDB'
 }) 
 
 db.connect();
@@ -33,7 +34,7 @@ app.get('/createTableProducts', (req, res) => {
 	db.query(sql, (err, result) => {
 		if (err) throw err
 		console.log(result)
-		res.send('Users table created...')
+		res.send('Products table created...')
 	})
 })
 
@@ -44,35 +45,59 @@ app.get('/createTableCategories', (req, res) => {
 	db.query(sql, (err, result) => {
 		if (err) throw err
 		console.log(result)
-		res.send('Posts table created...')
+		res.send('Categories table created...')
 	})
 })
+
+
+const sql= 'CREATE TABLE productsCategories(id_pro int, id_cat int)'
+
+
 
 //EJERCICIO 3
 app.post('/newproduct', (req,res)=>{
 
     const sql = `INSERT INTO products(name, price) VALUES('${req.body.name}', '${req.body.price}')`
-
+console.log(sql);
     db.query(sql,(err, result)=>{
         if(err) throw err
         console.log(result)
         res.send('Products inserted')
-
     })
 })
 
-
 app.post('/newcategory', (req,res)=>{
 
-    const sql =`INSERT INTO category(name)VALUES(${req.body.name})`
+    const sql =`INSERT INTO categories(name) VALUES('${req.body.name}')`
 
     db.query(sql,(err,result)=>{
         if(err) throw err
         console.log(result)
         res.send('category inserted')
     })
-
 })
+
+app.get('/getAllProducts', (req,res)=>{
+const sql = 'SELECT * FROM products';
+
+	db.query(sql, (err,result)=>{
+		if(err) throw err
+		//console.log(result)
+		res.send(result);
+	})
+})
+
+app.get('/getAllCategories', (req,res)=>{
+
+	const sql = 'SELECT * FROM categories';
+	db.query(sql, (err, result)=>{
+	if(err) throw err;
+		res.send(result);
+}
+	)
+})
+
+
 
 
 
