@@ -2,11 +2,12 @@
 const PORT = 3201;
 const mysql = require('mysql2')
 const express = require('express');
+const db = require('./config/database');
 
 const app = express();
 
 app.use(express.json());
-
+/*
 const db = mysql.createConnection({
     host: '127.0.0.1',
     port: 3308,
@@ -14,6 +15,7 @@ const db = mysql.createConnection({
     password: '1234',
 	database: 'expressSqlDB'
 }) 
+*/
 
 db.connect();
 
@@ -79,6 +81,7 @@ CREATE TABLE comments(
 
 
 //EJERCICIO 3
+/*
 app.post('/newproduct', (req,res)=>
 {
 const result = req.body;
@@ -96,22 +99,11 @@ const result = req.body;
 		})
 })
 })
-/*
-dataArray.forEach((data) => {
-	const sql = 'INSERT INTO your_table (field1, field2) VALUES (?, ?)';
-	const values = [data.field1, data.field2];
-  
-	connection.query(sql, values, (error, results, fields) => {
-	  if (error) throw error;
-	  console.log('Data inserted:', results);
-	});
-  });
 */
 
+
 app.post('/newcategory', (req,res)=>{
-
     const sql =`INSERT INTO categories(name) VALUES('${req.body.name}')`
-
     db.query(sql,(err,result)=>{
         if(err) throw err
         console.log(result)
@@ -120,17 +112,17 @@ app.post('/newcategory', (req,res)=>{
 })
 
 
+
 //EJERCICIO 4
-
-app.get('/getAllProducts', (req,res)=>{
+/*app.get('/getAllProducts', (req,res)=>{
 const sql = 'SELECT * FROM products';
-
 	db.query(sql, (err,result)=>{
 		if(err) throw err
 		//console.log(result)
 		res.send(result);
 	})
 })
+*/
 
 app.get('/getAllCategories', (req,res)=>{
 
@@ -143,7 +135,6 @@ app.get('/getAllCategories', (req,res)=>{
 })
 
 //Crea un endpoint que muestre de forma descendente los productos.
-//Crea un endpoint donde puedas buscar un producto por su nombre
 
 
 //Crea un endpoint que muestra todos los productos con sus categorías 
@@ -159,7 +150,7 @@ app.get('/getAllprodcat', (req,res)=>{
 })
 
 //Crea un endpoint donde puedas seleccionar un producto por id
-
+/*
 app.post('/getProdById', (req,res)=>{
 	
 	const sql = `SELECT name, price FROM products where id = ${req.body.id}`;
@@ -171,18 +162,22 @@ app.post('/getProdById', (req,res)=>{
 	})
 	
 })
-
+*/
 //Crea un endpoint donde puedas seleccionar una categoría por id
-app.post('/getCatById', (req,res)=>{
-
+/*app.post('/getCatById', (req,res)=>{
+	
 	const sql = `SELECT name FROM categories where id = ${req.body.id}`;
-
+	
 	db.query(sql, (err,result)=>{
-
+		
 		if(err) throw err
 		res.send(result);
 	})
 })
+*/
+
+//Crea un endpoint donde puedas buscar un producto por su nombre
+
 
 
 /*
@@ -190,6 +185,28 @@ sELECT comments.body, posts.title, users.first_name, users.last_name FROM commen
 INNER JOIN posts ON posts.id = comments.post_id
 INNER JOIN users ON users.id = comments.user_id;
 */
+//Ejercicio 5
+//Crea un endpoint donde puedas eliminar un producto por su id
+/*
+app.delete('/deleteprodbyid', (req, res)=>{
+	const sql =`DELETE from products where id = ${req.body.id}`;
+
+	db.query(sql, (err, result)=>{
+
+		if(err) throw err
+		res.send(result);
+	})
+
+})*/
+
+
+
+//Router
+
+app.use('/products', require('./routes/products.js'));
+
+app.use('/categories', require('./routes/categories.js'));
+
 
 
 
